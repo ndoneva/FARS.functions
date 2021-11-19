@@ -1,0 +1,102 @@
+---
+title: "FARS functions details"
+author: "Lais Ferreira"
+date: "20/03/2018"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteIndexEntry{Title of your vignette}
+  %\usepackage[UTF-8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+The ```FARS.functions``` package uses data from the US National Highway Traffic Safety Administration's Fatality Analysis Reporting System (FARS) to plot a map with the fatalities in a specific US State during a specific year.<br><br>
+
+# Functions
+
+This package contains five functions:<br><br>
+
+
+**1.** ```fars_read(filename)```: reads data from a csv file in the CURRENT working directory and returns it as an object of the "tbl_df" class. This function uses the ```read_csv()``` function from the ```readr``` package to read the data. After that, the ```tbl_df()``` function from the ```dplyr``` package is called to convert the data into the tbl_df format before returing it.<br><br>
+
+
+*Examples*:
+
+\#file exists in current working directory
+
+library(FARS.functions)
+
+FARS.functions:::fars_read("accident_2014.csv.bz2")<br><br>
+
+
+\#file doesn't exist in current working directory
+
+library(FARS.functions)
+
+FARS.functions:::fars_read("data123.csv.bz2") 
+
+\#Error: file 'data123.csv' does not exist.<br><br>
+
+
+**2.** ```make_filename(year)```: uses the year (input) to generate the file name for the Fatality Analysis Reporting System (FARS) data file.<br><br>
+
+*Examples*:
+
+library(FARS.functions)
+
+FARS.functions:::make_filename(2014) #generates "accident_2014.csv.bz2"<br><br>
+
+
+library(FARS.functions)
+
+FARS.functions:::make_filename("abcd") #generates "accident_NA.csv.bz2"<br><br>
+
+
+**3.** ```fars_read_years(year)```: reads Fatality Analysis Reporting System (FARS) data for multiple years. This function processes each element of a vector or list of years. To generate a file name with the year this function calls the supporting function ```make_filename()```, and then calls the supporting function ```fars_read()```, to read the FARS data file with  the generated file name.<br><br>
+
+*Examples*:
+
+library(FARS.functions)
+
+FARS.functions:::fars_read_years(c(2014, 2015, 2016))<br><br>
+
+
+library(FARS.functions)
+
+FARS.functions:::fars_read_years(c("2014", "2015", "2016"))<br><br>
+
+
+**4.** ```fars_summarize_years(year)```: summarizes Fatality Analysis Reporting System (FARS) data for multiple years into columns. This function produces a "tidy" data frame of FARS data for multiple yearsand the data is summarized by each month of each year with each year in its own column. This function uses ```fars_read_years()``` function to generate a list of month and year.<br><br>
+
+*Examples*:
+
+library(FARS.functions)
+
+FARS.functions:::fars_summarize_years(c(2014, 2015))<br><br>
+
+
+library(FARS.functions)
+
+FARS.functions:::fars_summarize_years(c("2013", "2014"))<br><br>
+
+
+**5.** ```fars_map_state(state.num, year)```: creates a map with the fatalities in a US State during a year according to the Fatality Analysis Reporting System (FARS) database. This function takes the state number and a year as inputs and calls the supporting functions ```make_filename()``` and ```fars_read()```. <br><br>
+
+*Examples*:
+
+library(FARS.functions)
+
+FARS.functions:::fars_map_state(30, 2013)<br><br>
+
+
+library(FARS.functions)
+
+FARS.functions:::fars_map_state(70, 2014) 
+
+\#Error: "invalid STATE number: 70"
+
